@@ -12,10 +12,13 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+import json
+import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+with open(os.path.join(BASE_DIR, "settingsenv.json")) as f:
+    db_config = json.load(f)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -75,10 +78,20 @@ WSGI_APPLICATION = 'company.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": db_config["DB_NAME"],
+        "USER": db_config["DB_USER"],
+        "PASSWORD": db_config["DB_PASSWORD"],
+        "HOST": db_config["DB_HOST"],
+        "PORT": db_config["DB_PORT"],
     }
 }
 
