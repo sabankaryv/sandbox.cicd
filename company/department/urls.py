@@ -17,5 +17,6 @@ urlpatterns = [
     # 6.Concretegeneric api view
     path('get_all_dept_concretegenericapiview/',GetallDeptGenericAPIandListApiView.as_view(),name="GetallDeptGenericAPIandListApiView"),
     # 7.ViewSetAPI
+    
     path('department_list_as_viewset/',department_list)
 ]
