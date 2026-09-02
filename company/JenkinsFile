@@ -522,3 +522,125 @@ stage('deploy')
         }
     }
 }
+
+
+// 8
+pipeline
+{
+    agent any
+    parameters
+    {
+        string(
+            name: 'MESSAGE',
+            defaultValue: 'Hello Jenkins',
+            description: 'Enter a message'
+        )
+    }
+    environment
+    {
+        PROJECT_DIR = 'company'
+    }
+    stages
+    {
+        stage('checkout')
+        {
+            steps
+            {
+             git branch:"sandbox.cicd",
+             credentialsId:"github-creds",
+             url:"https://github.com/sabankaryv/sandbox.cicd.git"   
+            }
+        }
+        stage('test')
+        {
+            steps
+            {
+                sh 'cd $PROJECT_DIR && python3 --version'
+                sh 'cd $PROJECT_DIR && python3 -m venv venv'
+                sh 'cd $PROJECT_DIR && venv/bin/pip install -r requirements.txt'
+                sh 'cd $PROJECT_DIR && venv/bin/python manage.py check'
+            }
+        }
+        stage('build')
+        {
+            steps
+            {
+                sh 'cd $PROJECT_DIR && docker build -t sandbox-django .'
+                echo "Docker Build Completed"
+            }
+        }
+        stage('docker push')
+        {
+            steps
+            {
+                sh 'cd $PROJECT_DIR && docker build -t sandbox-django .'
+                sh 'docker tag sandbox-django:latest 581891203125.dkr.ecr.ap-south-1.amazonaws.com/sandbox.cicd:latest'
+                sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 581891203125.dkr.ecr.ap-south-1.amazonaws.com'
+                sh 'docker push 581891203125.dkr.ecr.ap-south-1.amazonaws.com/sandbox.cicd:latest'
+                echo "Docker Image Pushed To ECR"
+    }
+}
+        stage('run')
+        {
+            steps
+            {
+                sh 'docker rm -f sandbox-django-container || true'
+                sh 'docker run -d -p 8000:8000 --name sandbox-django-container sandbox-django'
+                sh 'docker ps'
+                
+            }
+}
+stage('deploy')
+{
+    steps
+    {
+        sh 'docker pull 581891203125.dkr.ecr.ap-south-1.amazonaws.com/sandbox.cicd:latest'
+        sh 'docker rm -f sandbox-django-container || true'
+        sh 'docker run -d -p 8000:8000 --name sandbox-django-container 581891203125.dkr.ecr.ap-south-1.amazonaws.com/sandbox.cicd:latest'
+        sh 'docker ps'
+        echo "Deployment Completed"
+    }
+}
+        stage('Approval')
+        {
+            steps
+            {
+                 input(
+                     message: 'Do you want to continue?',
+                     ok: 'Yes, Continue'
+                     )
+            }
+        }
+        stage('conditional')
+        {
+            when
+            {
+                expression
+                {
+                    params.MESSAGE == 'build'
+
+                }
+            }
+            steps
+            {
+                 echo "Build stage is running"
+            }
+        }
+    }
+    post
+    {
+        always
+        {
+            echo "Pipeline finished"
+        }
+        success
+        {
+            echo "SUCCESS"
+            archiveArtifacts artifacts: 'django-build.zip'
+        }
+        failure
+        {
+            echo "Failure"
+        }
+    }
+}
