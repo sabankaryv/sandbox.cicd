@@ -1,14 +1,31 @@
-from pathlib import Path
 
+from pathlib import Path
 import json
 import os
 
+
+# ============================================================
+# BASE DIRECTORY
+# ============================================================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# ============================================================
+# LOAD CONFIGURATION
+# ============================================================
+
 if os.path.exists(BASE_DIR / "settingsenv.json"):
+
     with open(BASE_DIR / "settingsenv.json") as f:
-        db_config = json.load(f)
+        config = json.load(f)
+
+    db_config = config["DB"]
+
 else:
+
+    config = {}
+
     db_config = {
         "DB_HOST": os.getenv("DB_HOST"),
         "DB_PORT": os.getenv("DB_PORT"),
@@ -16,19 +33,22 @@ else:
         "DB_USER": os.getenv("DB_USER"),
         "DB_PASSWORD": os.getenv("DB_PASSWORD"),
     }
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
+# ============================================================
+# SECURITY
+# ============================================================
+
 SECRET_KEY = 'django-insecure-5it23y$7+me#0zq3x##xcq&a_eh^17#01h28x@5uhux*_c@n-%'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
 
-# Application definition
+# ============================================================
+# APPLICATION DEFINITION
+# ============================================================
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,8 +59,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'employee',
-    'department'
+    'department',
+    "image_upload",
+    "image_upload_production"
 ]
+
+
+# ============================================================
+# MIDDLEWARE
+# ============================================================
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,13 +79,26 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# ============================================================
+# URL / WSGI
+# ============================================================
+
 ROOT_URLCONF = 'company.urls'
+
+WSGI_APPLICATION = 'company.wsgi.application'
+
+
+# ============================================================
+# TEMPLATES
+# ============================================================
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
+
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -69,21 +109,15 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'company.wsgi.application'
 
+# ============================================================
+# DATABASE
+# ============================================================
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
+
         "NAME": db_config["DB_NAME"],
         "USER": db_config["DB_USER"],
         "PASSWORD": db_config["DB_PASSWORD"],
@@ -93,27 +127,58 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+# ============================================================
+# AWS CONFIGURATION
+# ============================================================
+
+AWS_ACCESS_KEY_ID = config.get(
+    "AWS_ACCESS_KEY_ID",
+    os.getenv("AWS_ACCESS_KEY_ID")
+)
+
+AWS_SECRET_ACCESS_KEY = config.get(
+    "AWS_SECRET_ACCESS_KEY",
+    os.getenv("AWS_SECRET_ACCESS_KEY")
+)
+
+AWS_REGION = config.get(
+    "AWS_REGION",
+    os.getenv("AWS_REGION")
+)
+
+AWS_S3_BUCKET_NAME = config.get(
+    "AWS_S3_BUCKET_NAME",
+    os.getenv("AWS_S3_BUCKET_NAME")
+)
+
+
+# ============================================================
+# PASSWORD VALIDATION
+# ============================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
+# ============================================================
+# INTERNATIONALIZATION
+# ============================================================
 
 LANGUAGE_CODE = 'en-us'
 
@@ -124,7 +189,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+# ============================================================
+# STATIC FILES
+# ============================================================
 
 STATIC_URL = 'static/'
