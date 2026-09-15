@@ -19,8 +19,7 @@ if os.path.exists(BASE_DIR / "settingsenv.json"):
 
     with open(BASE_DIR / "settingsenv.json") as f:
         config = json.load(f)
-
-    db_config = config["DB"]
+    #db_config = config["DB"]
 
 else:
 
