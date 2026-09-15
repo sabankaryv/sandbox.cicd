@@ -114,17 +114,17 @@ TEMPLATES = [
 # DATABASE
 # ============================================================
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
 
-        "NAME": db_config["DB_NAME"],
-        "USER": db_config["DB_USER"],
-        "PASSWORD": db_config["DB_PASSWORD"],
-        "HOST": db_config["DB_HOST"],
-        "PORT": db_config["DB_PORT"],
-    }
-}
+#         "NAME": db_config["DB_NAME"],
+#         "USER": db_config["DB_USER"],
+#         "PASSWORD": db_config["DB_PASSWORD"],
+#         "HOST": db_config["DB_HOST"],
+#         "PORT": db_config["DB_PORT"],
+#     }
+# }
 
 
 # ============================================================
