@@ -22,8 +22,3 @@ except ZeroDivisionError as e:
     print("Number Can Not be Devided by 0")
 finally:
     print("This Block Will Always Be Executed...")
-
-try:
-    number=int(input("Enter The Number: "))
-except ZeroDivisionError,ValueError:
-    
