@@ -25,5 +25,7 @@ urlpatterns = [
     path('health/', health_check),
     path('admin/', admin.site.urls),
     path('api/employee/',include('employee.urls')),
-    path('api/department/',include('department.urls'))
+    path('api/department/',include('department.urls')),
+    path('api/image_upload/',include('image_upload.urls')),
+    path('api/image_upload_prod/',include('image_upload_production.urls'))
 ]

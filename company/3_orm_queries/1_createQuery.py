@@ -1,168 +1,156 @@
+import os
+import sys
+import django
+
+# Add project root to Python path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "company.settings")
+django.setup()
+from employee.models import Employee, Department
+
+
 # 1_createQuery.py
-
-from employee.models import Employee
-
-
 # ============================================================
-# 1. CREATE - Basic
+# DJANGO ORM - CREATE OBJECTS
 # ============================================================
 
-employee = Employee.objects.create(name="Rahul",age=25,salary=50000)
-print(employee)
-# ============================================================
-# 2. CREATE using save()
-# ============================================================
+import os
+import sys
+import django
 
-employee = Employee(
-    name="Amit",
-    age=28,
-    salary=60000
+# ------------------------------------------------------------
+# Django Setup
+# ------------------------------------------------------------
+
+sys.path.insert(
+    0,
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
 
-employee.save()
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE",
+    "company.settings"
+)
+
+django.setup()
+
+from employee.models import Employee, Department
 
 
 # ============================================================
-# 3. CREATE using create()
+# 1. GET DEPARTMENT
+# ============================================================
+
+department = Department.objects.get(id=1)
+
+print("\nDepartment:")
+print(f"  ID   : {department.id}")
+print(f"  Name : {department.name}")
+
+
+# ============================================================
+# 2. CREATE - Using create()
 # ============================================================
 
 employee = Employee.objects.create(
-    name="Sneha",
-    age=27,
-    salary=55000
-)
-
-
-# ============================================================
-# 4. CREATE multiple records - bulk_create()
-# ============================================================
-
-employees = [
-    Employee(name="Raj", age=30, salary=70000),
-    Employee(name="Priya", age=26, salary=52000),
-    Employee(name="Vijay", age=32, salary=80000),
-]
-
-Employee.objects.bulk_create(employees)
-
-
-# ============================================================
-# 5. bulk_create() with many records
-# ============================================================
-
-employees = []
-
-for i in range(10):
-    employees.append(
-        Employee(
-            name=f"Employee {i}",
-            age=20 + i,
-            salary=30000 + (i * 1000)
-        )
-    )
-
-Employee.objects.bulk_create(employees)
-
-
-# ============================================================
-# 6. CREATE with ForeignKey
-# ============================================================
-
-# Example:
-# employee.department = department
-
-employee = Employee.objects.create(
-    name="Kiran",
-    age=29,
-    salary=65000,
+    name="Rahul",
+    age=25,
+    salary=50000,
+    email="rahul@gmail.com",
+    status="active",
     department=department
 )
 
+print("\n1. create()")
+print("   Employee created:", employee)
+
 
 # ============================================================
-# 7. CREATE using department_id
+# 3. CREATE - Using save()
 # ============================================================
 
-employee = Employee.objects.create(
-    name="Suresh",
-    age=31,
-    salary=72000,
-    department_id=1
+employee2 = Employee(
+    name="Yogesh",
+    age=30,
+    salary=30000,
+    email="yogesh@gmail.com",
+    status="active",
+    department=department
 )
 
+employee2.save()
 
-# ============================================================
-# 8. CREATE with only required fields
-# ============================================================
-
-employee = Employee.objects.create(
-    name="Neha"
-)
+print("\n2. save()")
+print("   Employee created:", employee2)
 
 
 # ============================================================
-# 9. CREATE and get returned object
+# 4. CREATE - Using get_or_create()
 # ============================================================
 
-employee = Employee.objects.create(
-    name="Pooja",
-    age=24,
-    salary=45000
-)
-
-print(employee.id)
-print(employee.name)
-print(employee.salary)
-
-
-# ============================================================
-# 10. CREATE inside transaction
-# ============================================================
-
-from django.db import transaction
-
-with transaction.atomic():
-
-    Employee.objects.create(
-        name="Employee A",
-        age=25,
-        salary=50000
-    )
-
-    Employee.objects.create(
-        name="Employee B",
-        age=26,
-        salary=55000
-    )
-
-
-# ============================================================
-# 11. CREATE using get_or_create()
-# ============================================================
-
-employee, created = Employee.objects.get_or_create(
-    name="Rahul",
+employee3, created = Employee.objects.get_or_create(
+    email="sachi1n@gmail.com",
     defaults={
+        "name": "Sachin",
         "age": 25,
-        "salary": 50000
+        "salary": 40000,
+        "status": "active",
+        "department": department,
     }
 )
 
-print(employee)
-print(created)
+print("\n3. get_or_create()")
+print("   Employee:", employee3)
+print("   Created :", created)
 
 
 # ============================================================
-# 12. CREATE using update_or_create()
+# 5. CREATE - Using bulk_create()
 # ============================================================
 
-employee, created = Employee.objects.update_or_create(
-    name="Rahul",
-    defaults={
-        "age": 26,
-        "salary": 60000
-    }
-)
+employees = [
+    Employee(
+        name="Ishan",
+        age=22,
+        salary=70000,
+        email="ishan@gmail.com",
+        status="active",
+        department=department,
+    ),
+    Employee(
+        name="Sanju",
+        age=30,
+        salary=6777,
+        email="sanju@gmail.com",
+        status="active",
+        department=department,
+    ),
+]
 
-print(employee)
-print(created)
+created_employees = Employee.objects.bulk_create(employees)
+
+print("\n4. bulk_create()")
+
+for employee in created_employees:
+    print(
+        f"   Created: "
+        f"{employee.name} | "
+        f"{employee.email}"
+    )
+
+
+# ============================================================
+# SUMMARY
+# ============================================================
+
+print("\n" + "=" * 60)
+print("CREATE OPERATIONS COMPLETED")
+print("CSGB → “Create, Save, Get, Batch")
+print("=" * 60)
+
+print("""
+1. create()        → Create one object directly
+2. save()          → Create object and explicitly save
+3. get_or_create() → Get existing OR create new
+4. bulk_create()   → Create multiple objects at once
+""")

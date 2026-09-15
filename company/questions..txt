@@ -1,0 +1,139 @@
+# 1.latent bridge
+1.Status Codes
+==> HTTP status codes are numbers that tell us whether a request was successful, failed, or needs some other action
+==> 2XX--> success 
+==> 4XX--> Not Found 
+==> 5XX--> Server Error
+
+1.2XX(Success):
+200 → OK
+201 → Created
+202 → Accepted
+204 → No Content
+
+2.4XX(Not Found)
+400 → Bad request
+401 → No/invalid authentication
+403 → No permission
+404 → Not found
+
+3.5XX(Server Error)
+500 → Server's problem
+502 → Bad response from another server
+503 → Server unavailable
+504 → Server timed out
+
+2 contentxt managers
+==> A context manager is used to properly manage resources, like opening and closing a file. It automatically performs the cleanup activity after we are done.
+with open("data.txt", "r") as file:
+    data = file.read()
+
+==> with is a Python keyword used to work with a context manager. It makes sure the required cleanup is performed automatically.
+
+3.How do you handle exceptions globally?
+==> Instead of handling exceptions separately in every API, I create a common exception handler and configure it globally. 
+==> Whenever an exception occurs, it goes to that handler, where I log the error and return a standard error response to the client.
+
+
+4.Why did you choose FastAPI over Django?
+We chose FastAPI because our requirement was mainly to build APIs.
+FastAPI provides good async support, request validation with Pydantic, and automatic Swagger documentation.
+We didn't need many Django-specific features, so FastAPI was a better fit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bedrock
+how will use ai in your projects
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# pickling
+# pydantic 
+# diff between fastapi and django
+# how to use global exception
+# how to save the images into aws bucket
+# program
+#1. def test(x=[]): 
+#     x.append(1) 
+#     return x 
+    
+# print(test()) #==>[1]
+# print(test()) #==>[1,1]
+# 2.
+# requests = [
+#     {"user_id": 101, "endpoint": "/orders"},
+#     {"user_id": 102, "endpoint": "/users"},
+#     {"user_id": 101, "endpoint": "/orders"},
+#     {"user_id": 103, "endpoint": "/orders"},
+#     {"user_id": 102, "endpoint": "/users"},
+#     {"user_id": 101, "endpoint": "/payments"},
+# ]
+
+
+# def checkendpointcount(requests):
+#     seen = {}
+#     for request in requests:
+#         key = (request["user_id"], request["endpoint"])
+#         if key in seen:
+#             seen[key] += 1
+#         else:
+#             seen[key] = 1
+#     print(seen)
+
+
+# checkendpointcount(requests)
+#why fastapi over docker and how async works in it
+
+what is model 
+
+A QuerySet is a collection of database objects returned by Django ORM. It represents the result of a database query and allows us to filter, sort, and further modify that quer

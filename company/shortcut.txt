@@ -1,0 +1,56 @@
+1.CREATE ==> CREATE SAVE GET BATCH
+    create(),save(),get_or_create(),bulk_create()
+2.READ ==> 
+ALL==>all()
+GOOD==get()
+FRIENDS==filter()
+EAT ==exists()
+VEGETABLES==values()
+VERY==values_list()
+OFTEN==only()
+DURING==defer()
+FESTIVALS==first()
+LUNCH==last()
+EVENING==exclude()
+COFFEE==count()
+BROCOLI==in_bulk()
+
+3.UPDATE
+save()
+update
+update_or_create()
+bulk_update()
+F
+
+4.DELETE
+delete()
+
+5.FORWARD
+6.REVERSE
+7.LOOKUP
+8.Q Objects with AND OR NOT
+9.N+1 Problem SELECT_RELATED
+
+10.STATUS CODES==>Success not Found SERVER ERROR 
+2XX==success(OKCAE,OK,CREATED,ACCPTED,EMPTY)
+4XX==Not (BUFN,HTTP_400_BAD_REQUEST,HTTP_401_UNAUTHORIZED,HTTP_403_FORBIDDEN,HTTP_404_NOT_FOUND)
+5XX== Server Error(IBSG,HTTP_500_INTERNAL_SERVER_ERROR,HTTP_502_BAD_GATEWAY,HTTP_503_SERVICE_UNAVAILABLE,HTTP_504_GATEWAY_TIMEOUT)
+11.
+UVRSSQGG
+from django.urls import path
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+12.MultiThreading
+T → Thread        → Create a thread
+S → start()       → Start the thread
+J → join()        → Wait for thread to finish
+I → is_alive()    → Check thread is running
+N → native_id     → Get OS thread ID
+D → daemon        → Background thread
+C → current_thread() → Get current thread
+
+12.AWS==>
+client==>>bcs3r,
+generate presigned url===>cp
+exist==>HEAD

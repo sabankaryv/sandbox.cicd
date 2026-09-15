@@ -1,0 +1,50 @@
+1.Tell Me About YourSelf
+
+
+Hi, my name is Yogesh Sabankar. I have around 7 years of experience in Python backend development.
+I have mainly worked with Python, Django, Django REST Framework, and FastAPI for developing backend applications and REST APIs.
+I have also worked on third-party API integrations, including CRM APIs, where I handled request/response processing and error handling.
+On the database side, I have experience with MySQL and PostgreSQL.
+I also have experience with AWS services like EC2, S3, and Lambda, along with CI/CD pipelines for application deployment.
+Overall, my experience is mainly in developing backend APIs, integrating external services, working with databases, and deploying applications in AWS environments.
+
+2.if asked why you want to change the company
+I’ve had a good learning experience in my current organization and have worked extensively on Python, Django, REST APIs, AWS, databases, and backend development. 
+At this stage of my career, I’m looking for an opportunity where I can take on more challenging responsibilities, work on larger-scale applications, and further strengthen my technical and domain expertise. 
+I believe this opportunity aligns well with my experience and also gives me good scope for long-term growth.
+
+If they ask, “Is it mainly because of salary?”
+Say:
+Compensation is one factor, of course, but it’s not the only reason. 
+My primary focus is career growth, technical challenges, and getting an opportunity to work on larger and more complex projects. 
+I’m looking for a role where my existing experience can add value while I continue to grow.”
+
+If they ask, “Why are you leaving after 7 years?”
+“I’ve gained strong experience over the years and have had the opportunity to work across different areas of backend development.
+I feel this is the right time to move to the next stage of my career, take on greater ownership, and work in a more challenging environment.
+
+
+
+
+2.How did you implement image upload in your application?
+In my application, we used AWS S3 for storing images instead of storing the image data directly in the database.
+The client sends the image to our Django REST API using multipart/form-data.
+Django receives the uploaded file through request.FILES
+We validate the file type and size, generate a unique S3 object key, and upload the file to an S3 bucket using boto3
+In the database, we store only the image metadata and S3 object key, not the actual image.
+Since the S3 bucket is private, whenever the client needs to access the image, we generate a temporary presigned GET URL and return it to the client.
+OR
+We use AWS S3 as the object storage for images. 
+The client sends the image as multipart/form-data to our Django REST API.
+Django accesses the uploaded file through request.FILES, validates the extension, MIME type and size, and generates a unique S3 object key to avoid filename collisions. 
+We upload the file to a private S3 bucket using boto3.
+We don't store the image binary in our database; 
+we store the S3 object key and relevant metadata such as filename, content type and size.
+When the image needs to be accessed, we generate a temporary presigned GET URL and return it to the client.
+For higher-scale systems or larger files, I would improve this by generating a presigned upload URL from Django and allowing the client to upload directly to S3, which removes the file-transfer load from the Django server.
+
+3.Is this the best approach for large files or high traffic?
+For a moderate-size application, Django receiving the multipart file and uploading it to S3 works well. 
+For larger files or higher traffic, I would prefer a presigned upload URL. 
+Django would authenticate and authorize the request and generate a presigned PUT/POST URL,then the client would upload the file directly to S3.
+This prevents the image data from passing through the Django application server and reduces server bandwidth and load.
